@@ -1,5 +1,7 @@
 package com.hcmue.vocabulary.english.entity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -17,26 +19,37 @@ public class Account {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
 	@Column(name = "username")
 	private String username;
+	
 	@Column(name = "password")
 	private String password;
+	
 	@Column(name = "firstname")
 	private String firstname;
+	
 	@Column(name = "lastname")
 	private String lastname;
+	
 	@Column(name = "email")
 	private String email;
+	
 	@Column(name = "birthday")
-	private Date birthday;
+	private String birthday;
+	
 	@Column(name = "phone")
 	private String phone;
-	@Column(name = "token")
-	private String token;
+	
 	@Column(name = "avatar")
 	private String avatar;
+	
+	@Column(name = "token")
+	private String token;
+	
 	@Column(name = "status_account")
 	private Boolean status;
+	
 	public int getId() {
 		return id;
 	}
@@ -55,7 +68,7 @@ public class Account {
 	public String getEmail() {
 		return email;
 	}
-	public Date getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 	public String getPhone() {
@@ -87,6 +100,9 @@ public class Account {
 	public Account() {
 		this.avatar = "account.png";
 		this.status = true;
+		Date date = new Date();
+		DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
+		this.birthday = dateformat.format(date);
 	}
 	
 }

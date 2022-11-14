@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Login</title>
+     <link rel="stylesheet" th:href="@{/static/css/style.css}">
+     <link rel="preconnect" href="https://fonts.gstatic.com">
+     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+	
+	<div class="container py-5 h-100">
+    <div class="row d-flex align-items-center justify-content-center h-100">
+      <div class="col-md-8 col-lg-7 col-xl-6">
+        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+           alt="Phone image" height="100%" width="100%">
+      </div>
+      <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+      	<div class="col-lg-3 d-none d-lg-block">
+                <a href="" class="text-decoration-none">
+                    <h1 class="m-0 display-5 font-weight-semi-bold" ><span class="text-primary font-weight-bold border px-3 mr-1" >Register</span></h1>
+                </a>
+     	</div>
+     	<div th:if="${stringError}">
+     			<br/>
+			   <div style="color: red; text-align: center">An error occurred while registering, you need to check again</div>
+				<br/>
+			</div>
+			<!-- ELSE -->
+			<div th:unless="${stringError}">
+			</div>
+		<form th:action="@{/register}" method="post" th:object="${account}">
+			<!-- Name input -->
+          <div class="form-outline mb-4">
+          	<label class="form-label" for="form1Example13" style="font-weight: bold;">First Name:</label>
+            <input type="text" id="form1Example13" class="form-control form-control-lg" placeholder="firstname" th:field="*{firstname}" name="firstname" required="required"/>
+            
+          </div>
+          
+          <!-- Gioi Tinh input -->
+          <div class="form-outline mb-4">
+          	<label class="form-label" for="form1Example13" style="font-weight: bold;">Last Name:</label>
+            <input type="text" id="form1Example13" class="form-control form-control-lg" placeholder="lastname" th:field="*{lastname}" name="lastname" required="required"/>
+            
+          </div>
+          
+          <!-- Tai Khoan input -->
+          <div class="form-outline mb-4">
+          	<label class="form-label" for="form1Example13" style="font-weight: bold;">Username:</label>
+            <input type="text" id="form1Example13" class="form-control form-control-lg" placeholder="username" th:field="*{username}" name="username" required="required"/>
+            
+          </div>
+
+          <!-- Password input -->
+          <div class="form-outline mb-4">
+          	<label class="form-label" for="form1Example23" style="font-weight: bold;">Password:</label>
+            <input type="password" id="form1Example23" class="form-control" placeholder="password" th:field="*{password}" name="password" required="required"/>
+            
+          </div>
+			
+			<!-- Confirm Password input -->
+          <div class="form-outline mb-4">
+          	<label class="form-label" for="form1Example23" style="font-weight: bold;">Confirm Password:</label>
+            <input type="password" id="form1Example23" class="form-control" placeholder="Confirm Password" name="confirm_password" required="required"/>
+          </div>
+          
+			<!-- Dia Chi input -->
+          <div class="form-outline mb-4">
+          	<label class="form-label" for="form1Example13" style="font-weight: bold;">Date of Birth:</label>
+            <input type="date" id="form1Example13" class="form-control form-control-lg" placeholder="Date of Birth" name="birthday" required="required"/>     
+          </div>
+          
+          <!-- Tai Khoan input -->
+          <div class="form-outline mb-4">
+          	<label class="form-label" for="form1Example13" style="font-weight: bold;">Email:</label>
+            <input type="email" id="form1Example13" class="form-control form-control-lg" placeholder="email" th:field="*{email}" name="email" required="required"/>
+            
+          </div>
+          
+          <!-- Tai Khoan input -->
+          <div class="form-outline mb-4">
+          	<label class="form-label" for="form1Example13" style="font-weight: bold;">Phone Number:</label>
+            <input type="text" id="form1Example13" class="form-control form-control-lg" placeholder="Phone Number" th:field="*{phone}" name="phone" required="required"/>
+            
+          </div>
+          
+          <!-- Submit button -->
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
+          
+		</form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,5 +1,7 @@
 package com.hcmue.vocabulary.english.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.hcmue.vocabulary.english.entity.Account;
@@ -17,7 +19,7 @@ public class AccountModel {
 	
 	private String email;
 	
-	private Date birthday;
+	private String birthday;
 	
 	private String phone;
 	
@@ -59,11 +61,11 @@ public class AccountModel {
 		this.email = email;
 	}
 
-	public Date getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 
@@ -136,5 +138,8 @@ public class AccountModel {
 	public AccountModel() {
 		this.avatar = "account.png";
 		this.status = true;
+		Date date = new Date();
+		DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
+		this.birthday = dateformat.format(date);
 	}
 }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+  xmlns:layout="http://www.w3.org/1999/xhtml"
+>
+<head>
+  <div th:replace="@{/admin/fragments/header}"/>
+</head>
+<body>          
+	<div th:replace="@{/admin/fragments/navar}"/>  
+    <div class="card-content">
+      <table>
+        <thead>
+        <tr>
+          <th class="checkbox-cell">
+            <label class="checkbox">
+              <input type="checkbox">
+              <span class="check"></span>
+            </label>
+          </th>
+          <th>ID Vocabulary</th>
+          <th>ID Category</th>
+          <th>Spelling</th>
+          <th>Sound</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item: ${listItems}">
+          <td class="checkbox-cell">
+            <label class="checkbox">
+              <input type="checkbox">
+              <span class="check"></span>
+            </label>
+          </td>
+          <td th:text="${item.id_vocabulary}"></td>
+          <td th:text="${item.id_category}"></td>
+          <td th:text="${item.spelling}"></td>
+          <td>
+          	<audio th:src="@{'/static/mp3/'+${item.sound}}" controls="controls" controlsList="nodownload"></audio>
+          </td>
+          <td th:text="${item.status_vocabulary}" style="color: red; font-weight: bold;text-transform: uppercase; "></td>
+          
+          <td class="actions-cell">
+            <div class="buttons right nowrap">
+              <form th:action="@{'/admin/'+${jclass}+'/edit/'+${item.id_vocabulary}}" method="get">
+                <button class="button small green --jb-modal"  data-target="sample-modal-2" type="submit">
+                  <span class="icon"><i class="mdi mdi-pen"></i></span>
+                </button>
+              </form>
+              <form th:action="@{'/admin/'+${jclass}+'/delete/'+${item.id_vocabulary}}" method="get">
+                <button class="button small red --jb-modal" data-target="sample-modal" type="submit">
+                  <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div th:replace="@{/admin/fragments/footer}"/>
+</body>
+</html>

@@ -55,5 +55,7 @@ public class VocabularyServices implements Services<VocabularyModel>{
 		
 	}
 
-	
+	public int getRownum() {
+		return repo.getRownum();
+	}
 }

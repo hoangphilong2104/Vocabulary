@@ -1,5 +1,7 @@
 package com.hcmue.vocabulary.english.entity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -19,7 +21,7 @@ public class Category {
 	@Column(name = "name_category")
 	private String name_category;
 	@Column(name = "date_create")
-	private Date date_create;
+	private String date_create;
 	@Column(name = "status_category")
 	private Boolean status_category;
 	public int getId_category() {
@@ -28,7 +30,7 @@ public class Category {
 	public String getName_category() {
 		return name_category;
 	}
-	public Date getDate_create() {
+	public String getDate_create() {
 		return date_create;
 	}
 	public Boolean getStatus_category() {
@@ -43,5 +45,8 @@ public class Category {
 	
 	public Category() {
 		this.status_category = true;
+		Date date = new Date();
+		DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
+		this.date_create = dateformat.format(date);
 	}
 }

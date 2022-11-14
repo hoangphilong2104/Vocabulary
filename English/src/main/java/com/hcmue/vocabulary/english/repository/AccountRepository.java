@@ -8,6 +8,8 @@ import com.hcmue.vocabulary.english.entity.Account;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account,Integer>{
-	@Query("select a from account a where a.username = ?1")
-	public Account findByUsername(String username);
+	@Query("SELECT a FROM Account a WHERE a.username = ?1")
+	Account findByUsername(String username);
+	@Query("SELECT COUNT(id) FROM Account a")
+	public int getRownum();
 }

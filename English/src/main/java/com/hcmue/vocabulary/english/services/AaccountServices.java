@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hcmue.vocabulary.english.entity.Account;
@@ -16,6 +17,9 @@ public class AaccountServices implements Services<AccountModel>{
 	
 	@Autowired
 	private AccountRepository repo;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Override
 	public List<AccountModel> listAll() {
@@ -54,6 +58,44 @@ public class AaccountServices implements Services<AccountModel>{
 		
 		
 	}
-
 	
+	public AccountModel findOne(String username) {
+		Account s = repo.findByUsername(username);
+		if(s!=null) {
+			AccountModel accountModel = new AccountModel(s);
+			return accountModel;
+		}
+		return null;
+	}
+	
+	public boolean register(AccountModel t, String MatKhauXN) {
+		if(!t.getPassword().equals(MatKhauXN)) {
+			return false;
+		}
+		
+		if(t.getUsername().equals("admin")) {
+			return false;
+		}
+		AccountModel k = findOne(t.getUsername());
+		if(k != null) {
+			return false;
+		}
+		try {
+			if(t != null) {
+				passwordEncoder = new BCryptPasswordEncoder();
+				t.setPassword(passwordEncoder.encode(t.getPassword()));;
+				
+				System.err.println(t.getBirthday());
+				update(t);
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public int getRownum() {
+		return repo.getRownum();
+	}
 }

@@ -1,0 +1,46 @@
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+  xmlns:layout="http://www.w3.org/1999/xhtml"
+>
+<head>
+</head>
+
+<body>
+    <section class="is-title-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <ul>
+      <li>Admin</li>
+      <li th:text="${iclass}">Account</li>
+    </ul>
+  </div>
+</section>
+
+<section class="is-hero-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <h1 class="title" th:text="${iclass}">
+      Account
+    </h1>
+  </div>
+</section>
+
+  <section class="section main-section">
+  <div class="card has-table">
+    <header class="card-header">
+      <p class="card-header-title" th:text="${iclass}">
+        <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
+        Clients
+      </p>
+      <div class="buttons right nowrap">
+       <form th:action="@{'/admin/'+${jclass}+'/add'}" method="get">
+         <button class="button small green --jb-modal"  data-target="sample-modal-2" type="submit">
+           <span class="icon"><i class="mdi mdi-plus"></i></span>
+         </button>
+       </form>
+      </div>
+      <a href="#" class="card-header-icon">
+        <span class="icon"><i class="mdi mdi-reload"></i></span>
+      </a>
+    </header>
+</body>
+</html>

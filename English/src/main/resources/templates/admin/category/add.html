@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+  xmlns:layout="http://www.w3.org/1999/xhtml"
+>
+<head>
+  <div th:replace="@{/admin/fragments/header}"/>
+</head>
+<body>
+    <div th:replace="@{/admin/fragments/navar}"/>      
+    <div class="card-content">
+      <form th:action="@{'/admin/'+${jclass}+'/add'}" th:object="${item}" th:method="post">
+        <table>
+          <tr>
+            <th>Name</th>
+            <td><input type="text" th:field="*{name_category}" class="form__field" required="required" placeholder="name"></td>
+          </tr>
+          <tr>
+            <th>Date Create</th>
+            <td><input type="date" th:value="${date_create}" name="date_create" class="form__field" required="required" placeholder="Date Create" readonly="readonly"></td>
+          </tr>
+          <tr>
+          	<th></th>
+            <td class="actions-cell">
+              <div>
+                <button class="button small red --jb-modal" data-target="sample-modal" type="submit">
+                  <span class="icon"><i class="mdi mdi-check"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</section>
+<div th:replace="@{/admin/fragments/footer}"/>
+</body>
+</html>

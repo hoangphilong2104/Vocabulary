@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+  xmlns:layout="http://www.w3.org/1999/xhtml"
+>
+<head>
+  <div th:replace="@{/admin/fragments/header}"/>
+</head>
+<body>
+    <div th:replace="@{/admin/fragments/navar}"/>      
+    <div class="card-content">
+      <form th:action="@{'/admin/'+${jclass}+'/add'}" th:object="${item}" th:method="post">
+        <table>
+          <tr>
+            <th>ID Vocabulary Type</th>
+            <td><input type="text" th:field="*{id_vocabulary_type}" class="form__field" required="required" readonly="readonly" style="color: red; font-weight: bold;"></td>
+          </tr>
+          <tr>
+            <th>ID Vocabulary</th>
+            <td>
+            	<select th:field="${item.id_vocabulary}">
+            		<option th:each="voca: ${vocabulary}" th:text="${voca.id_vocabulary+' - '+voca.spelling}" th:value="${voca.id_vocabulary}"></option>
+            	</select>
+            </td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td><input type="text" th:field="*{type}" class="form__field" required="required" placeholder="type"></td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td><input type="text" style="color: red;font-weight: bold;text-transform: uppercase;" th:field="*{status_vocabulary_type}" class="form__field" required="required" placeholder="status" readonly="readonly"></td>
+          </tr>
+          <tr>
+          	<th></th>
+            <td class="actions-cell">
+              <div>
+                <button class="button small red --jb-modal" data-target="sample-modal" type="submit">
+                  <span class="icon"><i class="mdi mdi-check"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</section>
+<div th:replace="@{/admin/fragments/footer}"/>
+</body>
+</html>
