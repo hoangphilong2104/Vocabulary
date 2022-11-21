@@ -1,5 +1,6 @@
 package com.hcmue.vocabulary.english.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,16 +21,31 @@ public class VocabularyServices implements Services<VocabularyModel>{
 	@Override
 	public List<VocabularyModel> listAll() {
 		List<Vocabulary> list = repo.findAll();
-		List<VocabularyModel> listAll = list.stream()
-				.map(s -> new VocabularyModel(s))
-				.collect(Collectors.toList());
-		return listAll;
+		if(list != null) {
+			List<VocabularyModel> listAll = list.stream()
+					.map(s -> new VocabularyModel(s))
+					.collect(Collectors.toList());
+			return listAll;
+		}
+		return null;
 	}
-
+	
+	public List<VocabularyModel> listAllByDesc() {
+		List<Vocabulary> list = repo.listAllByDesc();
+		if(list != null) {
+			List<VocabularyModel> listAll = list.stream()
+					.map(s -> new VocabularyModel(s))
+					.collect(Collectors.toList());
+			return listAll;
+		}
+		return null;
+	}
+	
 	@Override
 	public VocabularyModel findOne(int id) {
-		if(repo.getOne(id) != null) {
-			VocabularyModel a = new VocabularyModel(repo.getOne(id));
+		Vocabulary t = repo.findOne(id);
+		if(t != null) {
+			VocabularyModel a = new VocabularyModel(t);
 			return a;
 		}
 		return null;
@@ -45,7 +61,7 @@ public class VocabularyServices implements Services<VocabularyModel>{
 
 	@Override
 	public void delete(int id) {
-		Vocabulary a = repo.getOne(id);
+		Vocabulary a = repo.findOne(id);
 		if(a != null) {
 			VocabularyModel t = new VocabularyModel(a);
 			t.setStatus_vocabulary(false);
@@ -58,4 +74,25 @@ public class VocabularyServices implements Services<VocabularyModel>{
 	public int getRownum() {
 		return repo.getRownum();
 	}
+
+	public VocabularyModel findOne(String q) {
+		if(repo.findOne(q) != null) {
+			VocabularyModel a = new VocabularyModel(repo.findOne(q));
+			return a;
+		}
+		return null;
+	}
+	
+	public List<String> listSuggestions(){
+		List<String> suggestions = new ArrayList<String>();
+		List<VocabularyModel> listAll = listAll();
+		if(listAll != null) {
+			for(int i=0;i<listAll.size();i++) {
+				suggestions.add(listAll.get(i).getSpelling().toLowerCase());
+			}
+			return suggestions;
+		}
+		return null;
+	}
+	
 }

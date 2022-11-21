@@ -13,20 +13,8 @@
       <form th:action="@{'/admin/'+${jclass}+'/add'}" th:object="${item}" th:method="post">
         <table>
           <tr>
-            <th>ID Vocabulary Type</th>
-            <td>
-            	<select th:field="${item.id_vocabulary_type}">
-            		<option th:each="voca: ${vocabularyType}" th:text="${voca.id_vocabulary_type+' - '+voca.type+' - '+voca.vocabulary}" th:value="${voca.id_vocabulary_type}"></option>
-            	</select>
-            </td>
-          </tr>
-          <tr>
-            <th>Mean</th>
-            <td><input type="text" th:field="*{mean}" class="form__field" required="required" placeholder="mean"></td>
-          </tr>
-          <tr>
-            <th>Example</th>
-            <td><input type="text" th:field="*{example}" class="form__field" required="required" placeholder="example"></td>
+            <th>Name</th>
+            <td><input type="text" th:field="*{type_of_words}" class="form__field" required="required" placeholder="name"></td>
           </tr>
           <tr>
           	<th></th>

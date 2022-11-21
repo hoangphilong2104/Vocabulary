@@ -10,7 +10,6 @@ import com.hcmue.vocabulary.english.entity.VocabularyDetail;
 import com.hcmue.vocabulary.english.model.VocabularyDetailModel;
 import com.hcmue.vocabulary.english.repository.VocabularyDetailRepository;
 
-
 @Service
 public class VocabularyDetailServices implements Services<VocabularyDetailModel>{
 	
@@ -20,16 +19,31 @@ public class VocabularyDetailServices implements Services<VocabularyDetailModel>
 	@Override
 	public List<VocabularyDetailModel> listAll() {
 		List<VocabularyDetail> list = repo.findAll();
-		List<VocabularyDetailModel> listAll = list.stream()
-				.map(s -> new VocabularyDetailModel(s))
-				.collect(Collectors.toList());
-		return listAll;
+		if(list != null) {
+			List<VocabularyDetailModel> listAll = list.stream()
+					.map(s -> new VocabularyDetailModel(s))
+					.collect(Collectors.toList());
+			return listAll;
+		}
+		return null;
 	}
-
+	
+	public List<VocabularyDetailModel> listAllByDesc() {
+		List<VocabularyDetail> list = repo.listAllByDesc();
+		if(list != null) {
+			List<VocabularyDetailModel> listAll = list.stream()
+					.map(s -> new VocabularyDetailModel(s))
+					.collect(Collectors.toList());
+			return listAll;
+		}
+		return null;
+	}
+	
 	@Override
 	public VocabularyDetailModel findOne(int id) {
-		if(repo.getOne(id) != null) {
-			VocabularyDetailModel a = new VocabularyDetailModel(repo.getOne(id));
+		VocabularyDetail t = repo.findOne(id);
+		if(t != null) {
+			VocabularyDetailModel a = new VocabularyDetailModel(t);
 			return a;
 		}
 		return null;
@@ -45,7 +59,7 @@ public class VocabularyDetailServices implements Services<VocabularyDetailModel>
 
 	@Override
 	public void delete(int id) {
-		VocabularyDetail a = repo.getOne(id);
+		VocabularyDetail a = repo.findOne(id);
 		if(a != null) {
 			VocabularyDetailModel t = new VocabularyDetailModel(a);
 			t.setStatus_vocabulary_detail(false);
@@ -53,6 +67,29 @@ public class VocabularyDetailServices implements Services<VocabularyDetailModel>
 		}
 		
 	}
+	
+	public List<VocabularyDetailModel> listById(int id) {
+		List<VocabularyDetail> list = repo.listById(id);
+		if(list != null) {
+			List<VocabularyDetailModel> listAll = list.stream()
+					.map(s -> new VocabularyDetailModel(s))
+					.collect(Collectors.toList());
+			return listAll;
+		}
+		return null;
+	}
 
+	public int getRownum() {
+		return repo.getRownum();
+	}
+
+	public VocabularyDetailModel findOneDetail(int id) {
+		VocabularyDetail t = repo.findOneDetail(id);
+		if(t != null) {
+			VocabularyDetailModel a = new VocabularyDetailModel(t);
+			return a;
+		}
+		return null;
+	}
 	
 }

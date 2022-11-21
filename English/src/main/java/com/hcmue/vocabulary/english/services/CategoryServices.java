@@ -20,16 +20,31 @@ public class CategoryServices implements Services<CategoryModel>{
 	@Override
 	public List<CategoryModel> listAll() {
 		List<Category> list = repo.findAll();
-		List<CategoryModel> listAll = list.stream()
-				.map(s -> new CategoryModel(s))
-				.collect(Collectors.toList());
-		return listAll;
+		if(list != null) {
+			List<CategoryModel> listAll = list.stream()
+					.map(s -> new CategoryModel(s))
+					.collect(Collectors.toList());
+			return listAll;
+		}
+		return null;
+	}
+	
+	public List<CategoryModel> listAllByDesc() {
+		List<Category> list = repo.listAllByDesc();
+		if(list != null) {
+			List<CategoryModel> listAll = list.stream()
+					.map(s -> new CategoryModel(s))
+					.collect(Collectors.toList());
+			return listAll;
+		}
+		return null;
 	}
 
 	@Override
 	public CategoryModel findOne(int id) {
-		if(repo.getOne(id) != null) {
-			CategoryModel a = new CategoryModel(repo.getOne(id));
+		Category t = repo.findOne(id);
+		if(t != null) {
+			CategoryModel a = new CategoryModel(t);
 			return a;
 		}
 		return null;
@@ -45,11 +60,10 @@ public class CategoryServices implements Services<CategoryModel>{
 
 	@Override
 	public void delete(int id) {
-		Category a = repo.getOne(id);
+		CategoryModel a = findOne(id);
 		if(a != null) {
-			CategoryModel t = new CategoryModel(a);
-			t.setStatus_category(false);
-			update(t);
+			a.setStatus_category(false);
+			update(a);
 		}
 		
 		

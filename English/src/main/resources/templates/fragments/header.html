@@ -11,7 +11,7 @@
     <meta content="Free HTML Templates" name="desc  ription">
 
     <!-- Favicon -->
-    <link th:href="@{/static/img/favicon.jpg}" rel="icon">
+    <link th:href="@{/static/img/favicon.ico}" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -25,6 +25,12 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link th:href="@{/static/css/style.css}" rel="stylesheet">
+    
+    <!-- Libraries Search -->
+    <link rel="stylesheet" th:href="@{/static/css/style-search.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    
 </head>
 
 <body>
@@ -40,19 +46,19 @@
             </div>
             <div class="col-lg-6 text-center text-lg-right">
                 <div class="d-inline-flex align-items-center">
-                    <a class="text-white px-2" href="">
+                    <a class="text-white px-2" href="http://facebook.com">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a class="text-white px-2" href="">
+                    <a class="text-white px-2" href="https://twitter.com">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a class="text-white px-2" href="">
+                    <a class="text-white px-2" href="https://www.linkedin.com">
                         <i class="fab fa-linkedin-in"></i>
                     </a>
-                    <a class="text-white px-2" href="">
+                    <a class="text-white px-2" href="https://www.instagram.com">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    <a class="text-white pl-2" href="">
+                    <a class="text-white pl-2" href="https://www.youtube.com">
                         <i class="fab fa-youtube"></i>
                     </a>
                 </div>
@@ -65,7 +71,7 @@
     <!-- Navbar Start -->
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
-            <a href="index.html" class="navbar-brand ml-lg-3">
+            <a th:href="@{/}" class="navbar-brand ml-lg-3">
                 <h1 class="m-0 text-uppercase text-primary"><i class="fa fa-book-reader mr-3"></i>Edu-Learning</h1>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -73,22 +79,21 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mx-auto py-0">
-                    <a href="index.html" class="nav-item nav-link active">Home</a>
-                    <a href="about.html" class="nav-item nav-link">About</a>
-                    <a href="course.html" class="nav-item nav-link">Courses</a>
+                    <a th:href="@{/}" class="nav-item nav-link active">Home</a>
+                    <a th:href="@{/about}" class="nav-item nav-link">About</a>
+                    <!-- <a th:href="@{game}" class="nav-item nav-link">Game</a> -->
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Game</a>
                         <div class="dropdown-menu m-0">
-                            <a href="detail.html" class="dropdown-item">Course Detail</a>
-                            <a href="feature.html" class="dropdown-item">Our Features</a>
-                            <a href="team.html" class="dropdown-item">Instructors</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                            <a th:href="@{/gameE}" class="dropdown-item">Quiz English</a>
+                            <a th:href="@{/gameV}" class="dropdown-item">Quiz Vietnameses</a>
                         </div>
                     </div>
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                    <a th:href="@{/contact}" class="nav-item nav-link">Contact</a>
                 </div>
                 <a th:unless="${username}" th:href="@{/login}" class="btn btn-primary py-2 px-4 d-none d-lg-block">Join Us</a>
                 <a th:if="${username}" href="" class="nav-item nav-link" th:text="@{'Hi, '+${username}}"></a>
+                <a th:if="${username == 'admin'}" th:href="@{/admin}" class="btn btn-primary py-2 px-4 d-none d-lg-block">Admin Page</a>&nbsp;
                 <a th:if="${username}" th:href="@{/logout}" class="btn btn-primary py-2 px-4 d-none d-lg-block">Log Out</a>
             </div>
         </nav>
@@ -103,27 +108,21 @@
             <h1 class="text-white display-1 mb-5">Edu-Learning</h1>
             <div class="mx-auto mb-5" style="width: 100%; max-width: 600px;">
                 <div class="input-group">
-                    <div class="input-group-prepend">
-                        <!-- <button class="btn btn-outline-light bg-white text-body px-4 dropdown-toggle" type="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">Courses</button> -->
-                        <button class="btn btn-outline-light bg-white text-body px-4" type="button"
-                            aria-haspopup="true" aria-expanded="false">Vocabulary</button>
-                        <!-- <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Courses 1</a>
-                            <a class="dropdown-item" href="#">Courses 2</a>
-                            <a class="dropdown-item" href="#">Courses 3</a>
-                        </div> -->
-                    </div>
-                    <input type="text" class="form-control border-light" style="padding: 30px 25px;" placeholder="Keyword">
-                    <div class="input-group-append">
-                        <button class="btn btn-secondary px-4 px-lg-5">Search</button>
-                    </div>
+                    <div class="wrapper">
+				      <div class="search-input">
+				        <a href="" target="_blank" hidden></a>
+				        <input type="text" placeholder="Type to search..">
+				        <div class="autocom-box">
+				          <!-- here list are inserted from javascript -->
+				        </div>
+				        <div class="icon"><i class="fas fa-search" id="test"></i></div>
+				      </div>
+				    </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- Header End -->
     
-
 </body>
 </html>

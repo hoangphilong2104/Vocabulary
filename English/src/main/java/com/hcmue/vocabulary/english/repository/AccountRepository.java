@@ -12,4 +12,6 @@ public interface AccountRepository extends JpaRepository<Account,Integer>{
 	Account findByUsername(String username);
 	@Query("SELECT COUNT(id) FROM Account a")
 	public int getRownum();
+	@Query("SELECT a FROM Account a WHERE a.id = ?1")
+	public Account findOne(int id);
 }

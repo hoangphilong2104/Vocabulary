@@ -25,8 +25,12 @@
             </td>
           </tr>
           <tr>
-            <th>Type</th>
-            <td><input type="text" th:field="*{type}" class="form__field" required="required" placeholder="type"></td>
+            <th>ID Type Of Words</th>
+            <td>
+            	<select th:field="${item.id_type_of_words}">
+            		<option th:each="tow: ${typeOfWord}" th:text="${tow.id_type_of_words+' - '+tow.type_of_words}" th:value="${tow.id_type_of_words}"></option>
+            	</select>
+            </td>
           </tr>
           <tr>
             <th>Status</th>

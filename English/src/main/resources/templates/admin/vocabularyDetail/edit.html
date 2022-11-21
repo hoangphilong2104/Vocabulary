@@ -20,7 +20,7 @@
             <th>ID Vocabulary Type</th>
             <td>
             	<select th:field="${item.id_vocabulary_type}">
-            		<option th:each="voca: ${vocabularyType}" th:text="${voca.id_vocabulary_type+' - '+voca.type}" th:value="${voca.id_vocabulary_type}"></option>
+            		<option th:each="voca: ${vocabularyType}" th:text="${voca.id_vocabulary_type+' - '+voca.type+' - '+voca.vocabulary}" th:value="${voca.id_vocabulary_type}"></option>
             	</select>
             </td>
           </tr>

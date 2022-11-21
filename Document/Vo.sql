@@ -26,6 +26,12 @@ CREATE TABLE IF NOT EXISTS category (
     status_category BOOLEAN DEFAULT TRUE
 );
 
+CREATE TABLE IF NOT EXISTS type_of_words (
+   id_type_of_words int primary key auto_increment,
+   type_of_words VARCHAR(100),
+   status_type_of_words BOOLEAN DEFAULT TRUE
+);
+
 CREATE TABLE IF NOT EXISTS Vocabulary (
     id_vocabulary INT PRIMARY KEY AUTO_INCREMENT,
     id_category INT,
@@ -39,18 +45,22 @@ CREATE TABLE IF NOT EXISTS Vocabulary (
 CREATE TABLE IF NOT EXISTS vocabulary_type (
     id_vocabulary_type INT PRIMARY KEY AUTO_INCREMENT,
     id_vocabulary INT,
-    type_detail VARCHAR(30) NOT NULL,
+    id_type_of_words INT,
+    type_detail VARCHAR(100),
     status_vocabulary_type BOOLEAN DEFAULT TRUE,
     CONSTRAINT FK_Vocabulary FOREIGN KEY (id_vocabulary)
-        REFERENCES vocabulary (id_vocabulary)
+        REFERENCES vocabulary (id_vocabulary),
+    CONSTRAINT FK_Type_of_words FOREIGN KEY (id_type_of_words)
+        REFERENCES type_of_words (id_type_of_words)
 );
 
 create table vocabulary_detail (
-	id_vocabulary_detail int primary key auto_increment,
-	id_vocabulary_type int,
-	mean VARCHAR(100),
-	example_detail VARCHAR(200),
-	status_vocabulary_detail BOOLEAN DEFAULT TRUE,
-	CONSTRAINT FK_VocabularyType FOREIGN KEY (id_vocabulary_type)
-        REFERENCES vocabulary_type (id_vocabulary_type)
+   id_vocabulary_detail int primary key auto_increment,
+   id_vocabulary_type int,
+   mean VARCHAR(100),
+   example_detail VARCHAR(200),
+   status_vocabulary_detail BOOLEAN DEFAULT TRUE,
+   CONSTRAINT FK_VocabularyType FOREIGN KEY (id_vocabulary_type)
+   		REFERENCES vocabulary_type (id_vocabulary_type)
 );
+

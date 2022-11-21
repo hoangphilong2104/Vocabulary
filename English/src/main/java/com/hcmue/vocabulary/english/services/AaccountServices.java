@@ -24,16 +24,20 @@ public class AaccountServices implements Services<AccountModel>{
 	@Override
 	public List<AccountModel> listAll() {
 		List<Account> list = repo.findAll();
-		List<AccountModel> listAll = list.stream()
-				.map(s -> new AccountModel(s))
-				.collect(Collectors.toList());
-		return listAll;
+		if(list != null) {
+			List<AccountModel> listAll = list.stream()
+					.map(s -> new AccountModel(s))
+					.collect(Collectors.toList());
+			return listAll;
+		}
+		return null;
 	}
 
 	@Override
 	public AccountModel findOne(int id) {
-		if(repo.getOne(id) != null) {
-			AccountModel a = new AccountModel(repo.getOne(id));
+		Account t = repo.findOne(id);
+		if(t != null) {
+			AccountModel a = new AccountModel(t);
 			return a;
 		}
 		return null;
@@ -49,14 +53,11 @@ public class AaccountServices implements Services<AccountModel>{
 
 	@Override
 	public void delete(int id) {
-		Account a = repo.getOne(id);
+		AccountModel a = findOne(id);
 		if(a != null) {
-			AccountModel t = new AccountModel(a);
-			t.setStatus(false);
-			update(t);
+			a.setStatus(false);
+			update(a);
 		}
-		
-		
 	}
 	
 	public AccountModel findOne(String username) {
@@ -84,8 +85,6 @@ public class AaccountServices implements Services<AccountModel>{
 			if(t != null) {
 				passwordEncoder = new BCryptPasswordEncoder();
 				t.setPassword(passwordEncoder.encode(t.getPassword()));;
-				
-				System.err.println(t.getBirthday());
 				update(t);
 				return true;
 			}

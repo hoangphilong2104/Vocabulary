@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +27,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.hcmue.vocabulary.english.model.AccountModel;
 import com.hcmue.vocabulary.english.model.CategoryModel;
+import com.hcmue.vocabulary.english.model.TypeOfWordsModel;
 import com.hcmue.vocabulary.english.model.VocabularyDetailModel;
 import com.hcmue.vocabulary.english.model.VocabularyModel;
 import com.hcmue.vocabulary.english.model.VocabularyTypeModel;
 import com.hcmue.vocabulary.english.services.AaccountServices;
 import com.hcmue.vocabulary.english.services.CategoryServices;
+import com.hcmue.vocabulary.english.services.TypeOfWordsServices;
 import com.hcmue.vocabulary.english.services.VocabularyDetailServices;
 import com.hcmue.vocabulary.english.services.VocabularyServices;
 import com.hcmue.vocabulary.english.services.VocabularyTypeServices;
@@ -48,7 +51,8 @@ public class AdminController {
 	private VocabularyTypeServices vocabularyTypeServices;
 	@Autowired
 	private VocabularyDetailServices vocabularyDetailServices;
-	
+	@Autowired
+	private TypeOfWordsServices typeOfWordsServices;
 	//Dash board
 	@GetMapping("")
 	public ModelAndView admin(ModelMap model) {
@@ -90,6 +94,8 @@ public class AdminController {
 		try {
 			birthday = iformat(iparseHTMLtoCore(birthday));
 			accountModel.setBirthday(birthday);
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			accountModel.setPassword(passwordEncoder.encode(accountModel.getPassword()));;
 			accountServices.update(accountModel);
 			return new ModelAndView("redirect:/admin/account");
 		} catch (Exception e) {
@@ -190,14 +196,14 @@ public class AdminController {
 		VocabularyModel vocabularyModel = new VocabularyModel();
 		model.addAttribute("item",vocabularyModel);
 		model.addAttribute("jclass",jclass(3));
-		model.addAttribute("category",categoryServices.listAll());
+		model.addAttribute("category",categoryServices.listAllByDesc());
 		return new ModelAndView("admin/vocabulary/add","iclass",iclass(3));
 	}
 	
 	@PostMapping("/vocabulary/add")
 	public ModelAndView saveVocabulary(Model model, @ModelAttribute("item") VocabularyModel vocabularyModel) {
 		try {
-			System.err.println(vocabularyModel.getId_vocabulary());
+			vocabularyModel.setSound(vocabularyModel.getSpelling().toLowerCase()+".mp3");
 			vocabularyServices.update(vocabularyModel);
 			return new ModelAndView("redirect:/admin/vocabulary");
 		} catch (Exception e) {
@@ -212,7 +218,7 @@ public class AdminController {
 		VocabularyModel vocabularyModel = vocabularyServices.findOne(id);
 		model.addAttribute("item",vocabularyModel);
 		model.addAttribute("jclass",jclass(3));
-		model.addAttribute("category",categoryServices.listAll());
+		model.addAttribute("category",categoryServices.listAllByDesc());
 		return new ModelAndView("admin/vocabulary/edit","iclass",iclass(3));
 	}
 	
@@ -243,13 +249,15 @@ public class AdminController {
 		VocabularyTypeModel vocabularyTypeModel = new VocabularyTypeModel();
 		model.addAttribute("item",vocabularyTypeModel);
 		model.addAttribute("jclass",jclass(4));
-		model.addAttribute("vocabulary",vocabularyServices.listAll());
+		model.addAttribute("vocabulary",vocabularyServices.listAllByDesc());
+		model.addAttribute("typeOfWord",typeOfWordsServices.listAll());
 		return new ModelAndView("admin/vocabularyType/add","iclass",iclass(4));
 	}
 	
 	@PostMapping("/vocabularyType/add")
 	public ModelAndView saveVocabularyType(Model model, @ModelAttribute("item") VocabularyTypeModel vocabularyTypeModel) {
 		try {
+			vocabularyTypeModel.setType(typeOfWordsServices.findOne(vocabularyTypeModel.getId_type_of_words()).getType_of_words());
 			vocabularyTypeServices.update(vocabularyTypeModel);
 			return new ModelAndView("redirect:/admin/vocabularyType");
 		} catch (Exception e) {
@@ -264,7 +272,7 @@ public class AdminController {
 		VocabularyTypeModel vocabularyTypeModel = vocabularyTypeServices.findOne(id);
 		model.addAttribute("item",vocabularyTypeModel);
 		model.addAttribute("jclass",jclass(4));
-		model.addAttribute("vocabulary",vocabularyServices.listAll());
+		model.addAttribute("vocabulary",vocabularyServices.listAllByDesc());
 		return new ModelAndView("admin/vocabularyType/edit","iclass",iclass(4));
 	}
 	
@@ -295,7 +303,7 @@ public class AdminController {
 		VocabularyDetailModel vocabularyDetailModel = new VocabularyDetailModel();
 		model.addAttribute("item",vocabularyDetailModel);
 		model.addAttribute("jclass",jclass(5));
-		model.addAttribute("vocabularyType",vocabularyTypeServices.listAll());
+		model.addAttribute("vocabularyType",vocabularyTypeServices.listAllByDesc());
 		return new ModelAndView("admin/vocabularyDetail/add","iclass",iclass(5));
 	}
 	
@@ -316,7 +324,7 @@ public class AdminController {
 		VocabularyDetailModel vocabularyDetailModel = vocabularyDetailServices.findOne(id);
 		model.addAttribute("item",vocabularyDetailModel);
 		model.addAttribute("jclass",jclass(5));
-		model.addAttribute("vocabularyType",vocabularyTypeServices.listAll());
+		model.addAttribute("vocabularyType",vocabularyTypeServices.listAllByDesc());
 		return new ModelAndView("admin/vocabularyDetail/edit","iclass",iclass(5));
 	}
 	
@@ -328,6 +336,58 @@ public class AdminController {
 	}
 	/*
 	 * No: 			6
+	 * Class: 		Type Of Words
+	 * Comment:		
+	 * 
+	 */
+	//show
+	@GetMapping("/typeOfWords")
+	public ModelAndView showTypeOfWords(Model model) {
+		List<TypeOfWordsModel> list = typeOfWordsServices.listAll();
+		model.addAttribute("listItems", list);
+		model.addAttribute("jclass",jclass(6));
+		return new ModelAndView("admin/typeOfWords/show","iclass",iclass(6));
+	}
+	
+	//add
+	@GetMapping("/typeOfWords/add")
+	public ModelAndView addTypeOfWords(Model model) {
+		TypeOfWordsModel typeOfWordsModel = new TypeOfWordsModel();
+		model.addAttribute("item",typeOfWordsModel);
+		model.addAttribute("jclass",jclass(6));
+		model.addAttribute("vocabularyType",vocabularyTypeServices.listAllByDesc());
+		return new ModelAndView("admin/typeOfWords/add","iclass",iclass(6));
+	}
+	
+	@PostMapping("/typeOfWords/add")
+	public ModelAndView saveTypeOfWords(Model model, @ModelAttribute("item") TypeOfWordsModel typeOfWordsModel) {
+		try {
+			typeOfWordsServices.update(typeOfWordsModel);
+			return new ModelAndView("redirect:/admin/typeOfWords");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("redirect:/admin/error?url=typeOfWords/add");
+	}
+	
+	//edit
+	@GetMapping("/typeOfWords/edit/{id}")
+	public ModelAndView editTypeOfWords(Model model, @PathVariable("id") int id) {
+		TypeOfWordsModel typeOfWordsModel = typeOfWordsServices.findOne(id);
+		model.addAttribute("item",typeOfWordsModel);
+		model.addAttribute("jclass",jclass(6));
+		model.addAttribute("vocabularyType",vocabularyTypeServices.listAllByDesc());
+		return new ModelAndView("admin/typeOfWords/edit","iclass",iclass(6));
+	}
+	
+	//delete
+	@GetMapping("/typeOfWords/delete/{id}")
+	public ModelAndView deleteTypeOfWords(@PathVariable("id") int id) {
+		typeOfWordsServices.delete(id);
+	return new ModelAndView("redirect:/admin/typeOfWords");
+	}
+	/*
+	 * No: 			7
 	 * Class: 		Others
 	 * Comment:		
 	 * 
@@ -367,6 +427,9 @@ public class AdminController {
 		case 5:
 			s = "Vocabulary Detail";
 			break;
+		case 6:
+			s = "Type Of Words";
+			break;
 		}
 		return s;
 	}
@@ -391,6 +454,9 @@ public class AdminController {
 			break;
 		case 5:
 			s = "vocabularyDetail";
+			break;
+		case 6:
+			s = "typeOfWords";
 			break;
 		}
 		return s;

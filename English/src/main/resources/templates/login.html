@@ -28,14 +28,14 @@
           <!-- Email input -->
           <div class="form-outline mb-4">
           	<label class="form-label" for="form1Example13" style="font-weight: bold;">Username</label>
-            <input type="text" id="form1Example13" class="form-control form-control-lg" placeholder="Username" name="username" required="required"/>
-            
+            <input th:unless="${q}" type="text" id="form1Example13" class="form-control form-control-lg" placeholder="Username" name="username" required="required"/>
+            <input th:if="${q}" th:value="${q}" type="text" id="form1Example13" class="form-control form-control-lg" placeholder="Username" name="username" required="required"/>
           </div>
 
           <!-- Password input -->
           <div class="form-outline mb-4">
           	<label class="form-label" for="form1Example23" style="font-weight: bold;">Password</label>
-            <input type="password" id="form1Example23" class="form-control" placeholder="Password" name="password" required="required"/>
+            <input type="password" id="form1Example23" class="form-control" placeholder="Password" name="password" required="required" />
             
           </div>
 
