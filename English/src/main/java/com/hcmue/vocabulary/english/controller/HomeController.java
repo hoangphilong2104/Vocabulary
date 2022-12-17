@@ -161,7 +161,7 @@ public class HomeController {
 		model.addAttribute("weburls",weburl+"search?q=");
 		VocabularyModel item = vocabularyServices.findOne(q.toUpperCase());
 		if(item != null) {
-			model.addAttribute("account",item);
+			model.addAttribute("item",item);
 			List<ItemDetailModel> items = itemDetailServices.listById(item.getId_vocabulary());
 			if(items != null) {
 				model.addAttribute("items",items);
