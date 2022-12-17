@@ -1,7 +1,13 @@
 package com.hcmue.vocabulary.english.controller;
 
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hcmue.vocabulary.english.model.AccountModel;
@@ -60,7 +67,9 @@ public class HomeController {
 		model.addAttribute("suggestions",vocabularyServices.listSuggestions());
 		model.addAttribute("weburls",weburl+"search?q=");
 		if(principal != null) {
-			return new ModelAndView("home","username",principal.getName());
+			AccountModel item = accountServices.findOne(principal.getName());
+			model.addAttribute("account",item);
+			return new ModelAndView("home","username",item.getFullName());
 		}
 		return new ModelAndView("home");
 	}
@@ -109,7 +118,7 @@ public class HomeController {
 	//Register
 	@GetMapping(value = "/register_error")
 	public ModelAndView registerPageError(Model model) {
-		model.addAttribute("khachHang", new AccountModel());
+		model.addAttribute("account", new AccountModel());
 		model.addAttribute("stringError", "An error occurred while registering, you need to check again");
 		return new ModelAndView("register");
 	}
@@ -152,14 +161,16 @@ public class HomeController {
 		model.addAttribute("weburls",weburl+"search?q=");
 		VocabularyModel item = vocabularyServices.findOne(q.toUpperCase());
 		if(item != null) {
-			model.addAttribute("item",item);
+			model.addAttribute("account",item);
 			List<ItemDetailModel> items = itemDetailServices.listById(item.getId_vocabulary());
 			if(items != null) {
 				model.addAttribute("items",items);
 			}
 		}
 		if(principal != null) {
-			return new ModelAndView("vocabulary","username",principal.getName());
+			AccountModel account = accountServices.findOne(principal.getName());
+			model.addAttribute("account",account);
+			return new ModelAndView("vocabulary","username",account.getFullName());
 		}
 		return new ModelAndView("vocabulary");
 	}
@@ -169,7 +180,9 @@ public class HomeController {
 		model.addAttribute("suggestions",vocabularyServices.listSuggestions());
 		model.addAttribute("weburls",weburl+"search?q=");
 		if(principal != null) {
-			return new ModelAndView("about","username",principal.getName());
+			AccountModel account = accountServices.findOne(principal.getName());
+			model.addAttribute("account",account);
+			return new ModelAndView("about","username",account.getFullName());
 		}
 		return new ModelAndView("about");
 	}
@@ -179,7 +192,9 @@ public class HomeController {
 		model.addAttribute("suggestions",vocabularyServices.listSuggestions());
 		model.addAttribute("weburls",weburl+"search?q=");
 		if(principal != null) {
-			return new ModelAndView("contact","username",principal.getName());
+			AccountModel account = accountServices.findOne(principal.getName());
+			model.addAttribute("account",account);
+			return new ModelAndView("contact","username",account.getFullName());
 		}
 		return new ModelAndView("contact");
 	}
@@ -189,7 +204,9 @@ public class HomeController {
 		model.addAttribute("questionModel",quizServices.listAll());
 		model.addAttribute("weburl",weburl+"gameE");
 		if(principal != null) {
-			return new ModelAndView("game","username",principal.getName());
+			AccountModel account = accountServices.findOne(principal.getName());
+			model.addAttribute("account",account);
+			return new ModelAndView("game","username",account.getFullName());
 		}
 		return new ModelAndView("game");
 	}
@@ -199,8 +216,93 @@ public class HomeController {
 		model.addAttribute("questionModel",quizServices.listAllVietName());
 		model.addAttribute("weburl",weburl + "gameV");
 		if(principal != null) {
-			return new ModelAndView("game","username",principal.getName());
+			AccountModel account = accountServices.findOne(principal.getName());
+			model.addAttribute("account",account);
+			return new ModelAndView("game","username",account.getFullName());
 		}
 		return new ModelAndView("game");
+	}
+	
+	@GetMapping("/profiles")
+	public ModelAndView Profiles(Principal principal,ModelMap model) {
+		if(principal != null) {
+			AccountModel item = accountServices.findOne(principal.getName());
+			model.addAttribute("account",item);
+			model.addAttribute("birthday",iformatToHTML(iparse(item.getBirthday())));
+			return new ModelAndView("profiles","username",item.getFullName());
+		}else {
+			return new ModelAndView("redirect:/login");
+		}
+	}
+	
+	@GetMapping("/profiles/change-avatar")
+	public ModelAndView ProfilesChangeAvatar(Principal principal,ModelMap model) {
+		if(principal != null) {
+			AccountModel item = accountServices.findOne(principal.getName());
+			model.addAttribute("account",item);
+			return new ModelAndView("change_avatar","username",item.getFullName());
+		}else {
+			return new ModelAndView("redirect:/login");
+		}
+	}
+	
+	@PostMapping("/profiles/change-avatar")
+	public ModelAndView ProfilesChangeAvatarPost(Principal principal,ModelMap model,@RequestParam("photo") MultipartFile photo) {
+		if(principal != null) {
+			AccountModel item = accountServices.findOne(principal.getName());
+			if(photo.isEmpty()) {
+				return new ModelAndView("redirect:/profiles");
+			}
+			
+			Path path = Paths.get("src/main/resources/static/img/");
+			
+			try {
+				Files.createDirectories(path);
+				InputStream inputStream = photo.getInputStream();
+				Files.copy(inputStream, path.resolve(photo.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING);
+				System.err.println("Copy");
+				String infor = photo.getOriginalFilename().toLowerCase();
+				item.setAvatar(infor);
+				accountServices.update(item);
+				model.addAttribute("item",item);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return new ModelAndView("redirect:/profiles/change-avatar");
+		}else {
+			return new ModelAndView("redirect:/login");
+		}
+	}
+	
+	public String iformat(Date date) {
+		DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
+		return dateformat.format(date);
+	}
+	
+	public String iformatToHTML(Date date) {
+		DateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd");
+		return dateformat.format(date).replace("/", "-");
+	}
+	
+	public Date iparse(String date){
+		try {
+			DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
+			return dateformat.parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new Date();
+	}
+	
+	public Date iparseHTMLtoCore(String date){
+		try {
+			DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+			return dateformat.parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new Date();
 	}
 }

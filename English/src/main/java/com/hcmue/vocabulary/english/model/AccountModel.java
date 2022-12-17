@@ -142,4 +142,5 @@ public class AccountModel {
 		DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
 		this.birthday = dateformat.format(date);
 	}
+	
 }

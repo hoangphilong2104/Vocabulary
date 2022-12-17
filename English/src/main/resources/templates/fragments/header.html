@@ -92,14 +92,21 @@
                     <a th:href="@{/contact}" class="nav-item nav-link">Contact</a>
                 </div>
                 <a th:unless="${username}" th:href="@{/login}" class="btn btn-primary py-2 px-4 d-none d-lg-block">Join Us</a>
-                <a th:if="${username}" href="" class="nav-item nav-link" th:text="@{'Hi, '+${username}}"></a>
+                <div th:if="${username}">
+                	<img alt="" th:src="@{'/static/img/'+${account.avatar}}" width="30px" height="30px" class="icon">
+                </div>
+                <div class="nav-item dropdown" th:if="${username}">
+	                <a href="" class="nav-item nav-link" th:text="@{'Hi, '+${username}}" data-toggle="dropdown"></a>
+	                <div class="dropdown-menu m-0">
+		                            <a th:href="@{/profiles}" class="dropdown-item">Profiles</a>
+	                    </div>
+                </div>
                 <a th:if="${username == 'admin'}" th:href="@{/admin}" class="btn btn-primary py-2 px-4 d-none d-lg-block">Admin Page</a>&nbsp;
                 <a th:if="${username}" th:href="@{/logout}" class="btn btn-primary py-2 px-4 d-none d-lg-block">Log Out</a>
             </div>
         </nav>
     </div>
     <!-- Navbar End -->
-
 
     <!-- Header Start -->
     <div class="jumbotron jumbotron-fluid position-relative overlay-bottom" style="margin-bottom: 90px;">

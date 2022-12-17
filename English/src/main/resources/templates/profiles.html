@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+  xmlns:layout="http://www.w3.org/1999/xhtml"
+>
+<head>
+    <div th:replace="@{/fragments/header}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/profiles.css}">
+</head>
+
+<body>
+    <!-- About Start -->
+    <div class="container-fluid py-5" id="detail404">
+    <h1 class="display-1" style="text-align: center;">Profiles</h1>
+        <div class="container py-5" style="text-align: center;">
+		     <table th:object="${item}">
+		          <tr>
+		            <th>First Name</th>
+		            <td><input type="text" th:field="*{firstname}" class="form__field" required="required" placeholder="firstname" disabled="disabled"></td>
+		          </tr>
+		          <tr>
+		            <th>Last Name</th>
+		            <td><input type="text" th:field="*{lastname}" class="form__field" required="required" placeholder="lastname" disabled="disabled"></td>
+		          </tr>
+		          <tr>
+		            <th>Username</th>
+		            <td><input type="text" th:field="*{username}" class="form__field" required="required" placeholder="username" disabled="disabled"></td>
+		          </tr>
+		          <tr>
+		            <th>Email</th>
+		            <td><input type="text" th:field="*{email}" class="form__field" required="required" placeholder="email" disabled="disabled"></td>
+		          </tr>
+		          <tr>
+		            <th>Date of Birth</th>
+		            <td><input type="date" th:value="${birthday}" name="birthday" class="form__field" required="required" placeholder="Date of Birth" disabled="disabled"></td>
+		          </tr>
+		          <tr>
+		            <th>Phone Number</th>
+		            <td><input type="text" th:field="*{phone}" class="form__field" required="required" placeholder="Phone Number" disabled="disabled"></td>
+		          </tr>
+		          <tr>
+		            <th>Avatar</th>
+		            <td>
+		            	<form th:action="@{/profiles/change-avatar}">
+			            	<img alt="" th:src="@{'/static/img/'+${item.avatar}}" width="100px" height="100px">
+			            	<button class="button small red --jb-modal" data-target="sample-modal" type="submit">
+			                  <span><i>Change Avatar</i></span>
+			                </button>
+		           		 </form>
+		            </td>
+		          </tr>
+	        </table>
+        </div>
+    </div>
+    <!-- About End -->
+    <!-- Testimonial Start -->
+	<div th:replace="@{/fragments/footer}"/>
+	<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=658339141622648&ev=PageView&noscript=1"/></noscript>
+	<link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
+	<script>
+    	window.scrollTo(0, 1200);
+    </script>
+</body>
+
+</html>
